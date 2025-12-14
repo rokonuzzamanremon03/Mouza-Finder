@@ -1,6 +1,6 @@
 {
-  "name": "মৌজা ও জমির মূল্য",
-  "short_name": "জমির মূল্য",
+  "name": "Mouza Finder",
+  "short_name": "Mouza Finder",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
