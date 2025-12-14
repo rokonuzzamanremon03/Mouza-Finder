@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    Mouza Finder</title>
-    <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#007bff">
-<link rel="apple-touch-icon" href="icon.png">
-
+    <title>মৌজা ও জমির মূল্য তালিকা - কলারোয়া, সাতক্ষীরা</title>
     <style>
         :root {
             --primary-color: #007bff;
@@ -36,7 +32,6 @@
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            position: relative;
         }
 
         .header h1 {
@@ -49,26 +44,6 @@
             margin: 10px 0 0;
             font-size: 14px;
             color: #666;
-        }
-
-        /* Install Button Style */
-        #installBtn {
-            display: none; /* Hidden by default */
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-size: 14px;
-            margin-top: 15px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            animation: popIn 0.5s ease;
-        }
-        
-        @keyframes popIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
         }
 
         .search-box {
@@ -162,6 +137,7 @@
             margin-top: 20px;
         }
 
+        /* Responsive */
         @media (max-width: 600px) {
             .price-grid {
                 grid-template-columns: 1fr;
@@ -173,14 +149,13 @@
 
 <div class="container">
     <div class="header">
-						<h1>Mouza Finder 🗺️</h1>
+        <h1>ভূমি ও মৌজা অনুসন্ধান</h1>
         <p>সাব-রেজিস্ট্রারের কার্যালয়, কলারোয়া, সাতক্ষীরা</p>
-        <button id="installBtn">📲 অ্যাপ ইনস্টল করুন</button>
-        <p style="font-size: 12px; color: #ff5722; margin-top: 10px;">* জে.এল নং এবং মৌজার নাম দিয়ে সার্চ করুন</p>
+        <p style="font-size: 12px; color: #ff5722;">* জে.এল নং এবং মৌজার নাম দিয়ে সার্চ করুন</p>
     </div>
 
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="মৌজার নাম বা জে.এল নম্বর লিখুন... (যেমন: 1 বা ১)">
+        <input type="text" id="searchInput" placeholder="মৌজার নাম বা জে.এল নম্বর লিখুন... (যেমন: চান্দুড়িয়া বা 1)">
     </div>
 
     <div id="resultsArea">
@@ -189,7 +164,10 @@
 
 <script>
     // Data from the images (1-117)
+    // Note: I have transcribed all Names and JL Numbers.
+    // Prices are filled for the first few as examples. You can edit the 'prices' fields.
     const mouzaData = [
+        // Page 1
         { jl: "১", name: "চান্দুড়িয়া", p1: "৪৪,৭০২/-", p2: "৪১,৫৫৯/-", p3: "৬,২৫০/-", p4: "-" },
         { jl: "২", name: "চন্দনপুর", p1: "৭৯,৫৭২/-", p2: "৩৩,৬২২/-", p3: "১৩,১২০/-", p4: "১,৩১,৩৫১/-" },
         { jl: "৩", name: "সুলতানপুর", p1: "৫৮,৩৩৮/-", p2: "১২,৪৯১/-", p3: "৮,২৪২/-", p4: "-" },
@@ -228,6 +206,8 @@
         { jl: "৩৬", name: "তেলকুপি", p1: "৬,০০০/-", p2: "১৪,৮০৮/-", p3: "২,৪১৩/-", p4: "-" },
         { jl: "৩৭", name: "গণপতিপুর", p1: "২৫,৪৫৭/-", p2: "৩৮,৭৯৭/-", p3: "১৪,৭৬৭/-", p4: "-" },
         { jl: "৩৮", name: "দামোদরকাটি", p1: "৮,১০৫/-", p2: "২৬,৪৩২/-", p3: "২২,১২১/-", p4: "-" },
+        
+        // Page 2
         { jl: "৩৯", name: "ব্রজবাকসা", p1: "৩৯,০৩৪/-", p2: "২৭,৬৫৬/-", p3: "১৫,২৬৩/-", p4: "১,৭০,০০০/-" },
         { jl: "৪০", name: "কাউরিয়া", p1: "৬,২৪০/-", p2: "২০,৩৩৩/-", p3: "১৩,৭৯৭/-", p4: "-" },
         { jl: "৪১", name: "বলিয়ানপুর", p1: "১১,০৩৩/-", p2: "১৫,৬৬৭/-", p3: "৮,১৪২/-", p4: "-" },
@@ -248,7 +228,7 @@
         { jl: "৫৬", name: "রঘুনাথপুর", p1: "১,৬০,৮৭২/-", p2: "১,৩৯,৪৫৩/-", p3: "১২,৫৩৭/-", p4: "২,০৫,৮৮২/-" },
         { jl: "৫৭", name: "দিংগ", p1: "৫১,১৫৪/-", p2: "৪০,১১৪/-", p3: "১১,৩৯০/-", p4: "-" },
         { jl: "৫৮", name: "হালসী", p1: "২৪,৪৫৩/-", p2: "৪৮,২৯৯/-", p3: "১৬,৯৪৭/-", p4: "-" },
-        { jl: "৫৯", name: "তুলসীডাঙ্গা (পৌরসভা)", p1: "২,০৬,৪৭৩/-", p2: "১,৩০,২০১/-", p3: "৪৯,৯৪৭/-", p4: "৬,২৫০/-" },
+        { jl: "৫৯", name: "তুলসীডাঙ্গা (পৌরসভা)", p1: "২,০৬,৪৭৩/-", p2: "১,৩০,২০১/-", p3: "৪৯,৯৪৭/-", p4: "৬৪,২৫০/-" },
         { jl: "৬০", name: "ঝিকরা (পৌরসভা)", p1: "২,৫০,০০০/-", p2: "১,১০,০৯৯/-", p3: "১৬,০৩৭/-", p4: "২৮,৪৫,৭৮৫/-" },
         { jl: "৬১", name: "গোপিনাথপুর (পৌরসভা)", p1: "৬৬,৮৮২/-", p2: "৯৮,১৪২/-", p3: "৪০,০৭৩/-", p4: "৬০,০০০/-" },
         { jl: "৬২", name: "মুরারীকাটি (পৌরসভা)", p1: "৮৭,৭১৭/-", p2: "৫৭,৮৬৩/-", p3: "২৯,০৮৮/-", p4: "৩,৫০,০০০/-" },
@@ -270,6 +250,8 @@
         { jl: "৭৮", name: "শিবানন্দকাটি", p1: "৯,১৪৬/-", p2: "১৬,৩০২/-", p3: "১৬,৭২৯/-", p4: "-" },
         { jl: "৭৯", name: "আটুলিয়া", p1: "৬,২১৪/-", p2: "১৩,৯০৯/-", p3: "১,৭১,৬১৪/-", p4: "-" },
         { jl: "৮০", name: "ধানঘোরা", p1: "৩০,৩৩৩/-", p2: "৫২,৮০০/-", p3: "১৬,০০১/-", p4: "-" },
+
+        // Page 3
         { jl: "৮১", name: "গোরঙ্গপুর", p1: "৩৭,৬০০/-", p2: "৪৫,৪৫৪/-", p3: "১,২০০/-", p4: "-" },
         { jl: "৮২", name: "চিচিলা", p1: "৪,৪০০/-", p2: "৩১,০৭১/-", p3: "৮,৬৭৪/-", p4: "-" },
         { jl: "৮৩", name: "পানকৌড়িয়া", p1: "৫,৫৯৪/-", p2: "২৭,৩৩৮/-", p3: "১৮,২৫১/-", p4: "-" },
@@ -309,20 +291,7 @@
         { jl: "১১৭", name: "ধান্ডিয়া", p1: "১৮,১০৩/-", p2: "৪১,৭২২/-", p3: "৪০,২৬২/-", p4: "-" }
     ];
 
-    const searchInput = document.getElementById('searchInput');
-    const resultsArea = document.getElementById('resultsArea');
-    const installBtn = document.getElementById('installBtn');
-
-    // --- PWA Installer Logic ---
-    let deferredPrompt;
-
-    // Register Service Worker
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js')
-            .then(() => console.log('Service Worker Registered'));
-    }
-
-    // Listen for install prompt
+// Listen for install prompt
     window.addEventListener('beforeinstallprompt', (e) => {
         // Prevent immediate popup (standard behavior)
         e.preventDefault();
@@ -342,6 +311,8 @@
         }
     });
     // ---------------------------
+    const searchInput = document.getElementById('searchInput');
+    const resultsArea = document.getElementById('resultsArea');
 
     function renderResults(data) {
         resultsArea.innerHTML = '';
@@ -384,7 +355,7 @@
     // Initial render
     renderResults(mouzaData);
 
-    // Number Converter
+    // ১. এই ফাংশনটি ইংরেজি নম্বরকে বাংলায় কনভার্ট করবে (নতুন যোগ করা হয়েছে)
     const toBengaliNumber = (str) => {
         const engToBn = { 
             '0': '০', '1': '১', '2': '২', '3': '৩', '4': '৪', 
@@ -393,15 +364,18 @@
         return str.replace(/[0-9]/g, (match) => engToBn[match]);
     };
 
-    // Search functionality
+    // ২. সার্চ ফাংশনালিটি (আপডেট করা হয়েছে)
     searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.trim();
-        const bengaliSearchTerm = toBengaliNumber(searchTerm);
+        const searchTerm = e.target.value.trim(); 
+        
+        // তুমি যাই টাইপ করো (ইংরেজি বা বাংলা), সেটাকে আমরা বাংলায় কনভার্ট করে নিচ্ছি
+        const bengaliSearchTerm = toBengaliNumber(searchTerm); 
 
         const filteredData = mouzaData.filter(item => {
+            // এখন সে নামের সাথে অথবা বাংলা নম্বরের সাথে মিলিয়ে দেখবে
             return item.name.includes(searchTerm) || 
-                   item.jl.toString().includes(searchTerm) ||
-                   item.jl.toString().includes(bengaliSearchTerm);
+                   item.jl.toString().includes(searchTerm) ||      // যদি কেউ সরাসরি বাংলায় লেখে
+                   item.jl.toString().includes(bengaliSearchTerm); // যদি কেউ ইংরেজিতে লেখে
         });
 
         renderResults(filteredData);
