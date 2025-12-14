@@ -290,26 +290,7 @@
         { jl: "১১৬", name: "জয়নাগর (চক)", p1: "৭,১০০/-", p2: "৫০,০০০/-", p3: "৩,৩২৫/-", p4: "-" },
         { jl: "১১৭", name: "ধান্ডিয়া", p1: "১৮,১০৩/-", p2: "৪১,৭২২/-", p3: "৪০,২৬২/-", p4: "-" }
     ];
-// Listen for install prompt
-    window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent immediate popup (standard behavior)
-        e.preventDefault();
-        deferredPrompt = e;
-        // Show our custom button
-        installBtn.style.display = 'inline-block';
-    });
 
-    installBtn.addEventListener('click', async () => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') {
-                installBtn.style.display = 'none';
-            }
-            deferredPrompt = null;
-        }
-    });
-    // ---------------------------
     const searchInput = document.getElementById('searchInput');
     const resultsArea = document.getElementById('resultsArea');
 
