@@ -5,31 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mouza Finder</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#667eea">
+    <meta name="theme-color" content="#059669">
     <link rel="apple-touch-icon" href="images/logo.png">
     
     <style>
         :root {
-            --primary-color: #2563eb;
+            --primary-green: #059669; /* প্রধান সবুজ রং */
+            --dark-green: #064e3b;   /* গাঢ় সবুজ */
+            --light-green: #d1fae5;  /* হালকা সবুজ */
             --text-color: #1f2937;
-            --glass-bg: rgba(255, 255, 255, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.4);
-            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.85); /* একটু বেশি সাদা রাখা হয়েছে স্বচ্ছতার জন্য */
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --shadow: 0 8px 32px 0 rgba(0, 50, 0, 0.15); /* শ্যাডোতেও সবুজাভ ভাব */
         }
 
         body {
             font-family: 'SolaimanLipi', 'Kalpurush', Arial, sans-serif;
-            /* সুন্দর গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড */
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* ভূমির সাথে মিল রেখে সুন্দর সবুজ গ্রেডিয়েন্ট */
+            background: linear-gradient(135deg, #34d399 0%, #065f46 100%);
             margin: 0;
             padding: 20px;
             color: var(--text-color);
             min-height: 100vh;
-            background-attachment: fixed; /* স্ক্রল করলে ব্যাকগ্রাউন্ড নড়বে না */
+            background-attachment: fixed;
         }
 
         .container {
-            max-width: 1200px; /* পিসির জন্য চওড়া */
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -52,7 +54,7 @@
         .header h1 {
             margin: 0;
             font-size: 28px;
-            color: #1e3a8a;
+            color: var(--dark-green); /* শিরোনাম গাঢ় সবুজ */
             text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
@@ -77,17 +79,17 @@
             border: none;
             border-radius: 50px;
             outline: none;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
+            color: var(--dark-green);
         }
 
         .search-box input:focus {
             transform: scale(1.02);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.2); /* ফোকাস করলে সবুজ আভা */
         }
 
-        /* রেজাল্ট এরিয়া পিসির জন্য Grid সিস্টেম */
         #resultsArea {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -106,10 +108,10 @@
         .result-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 40px rgba(0,0,0,0.2);
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.95);
         }
 
-        /* রঙিন বর্ডার কার্ডের বাম পাশে */
+        /* কার্ডের বাম পাশে সবুজ বর্ডার */
         .result-card::before {
             content: '';
             position: absolute;
@@ -117,7 +119,7 @@
             top: 0;
             height: 100%;
             width: 6px;
-            background: linear-gradient(to bottom, #2563eb, #9333ea);
+            background: linear-gradient(to bottom, #34d399, #059669);
         }
 
         .card-header {
@@ -130,19 +132,20 @@
         }
 
         .jl-badge {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            /* ব্যাজ এখন সবুজ */
+            background: linear-gradient(135deg, #10b981, #047857);
             color: white;
             padding: 6px 12px;
             border-radius: 20px;
             font-weight: bold;
             font-size: 14px;
-            box-shadow: 0 2px 5px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 2px 5px rgba(5, 150, 105, 0.3);
         }
 
         .mouza-name {
             font-size: 20px;
             font-weight: 700;
-            color: #111827;
+            color: var(--dark-green);
             text-align: right;
         }
 
@@ -169,7 +172,7 @@
 
         .price-value {
             font-weight: 700;
-            color: #059669; /* সবুজ রঙ টাকার জন্য */
+            color: #059669; /* দামের রং সবুজ */
             font-size: 15px;
         }
 
@@ -183,14 +186,13 @@
             border-radius: 10px;
         }
 
-        /* Install Button (Hidden by default) */
         #installBtn {
             display: none;
             position: fixed;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: #111827;
+            background: #064e3b; /* বাটন এখন গাঢ় সবুজ */
             color: white;
             border: none;
             padding: 12px 24px;
@@ -207,11 +209,9 @@
             to { transform: translate(-50%, 0); opacity: 1; }
         }
 
-        /* Responsive Tweaks */
         @media (max-width: 600px) {
             body { padding: 15px; }
             .header h1 { font-size: 22px; }
-            /* মোবাইলে কার্ডগুলো এক কলামে থাকবে (Grid already handles auto-fill, but let's ensure) */
             #resultsArea { grid-template-columns: 1fr; }
         }
     </style>
@@ -220,9 +220,9 @@
 
 <div class="container">
     <div class="header glass-panel">
-        <h1>ভূমি ও মৌজা অনুসন্ধান</h1>
+        <h1>ভূমি ও মৌজা অনুসন্ধান 🇧🇩</h1>
         <p>সাব-রেজিস্ট্রারের কার্যালয়, কলারোয়া, সাতক্ষীরা</p>
-        <p style="font-size: 12px; color: #dc2626; margin-top: 5px;">* জে.এল নং এবং মৌজার নাম দিয়ে সার্চ করুন</p>
+        <p style="font-size: 12px; color: #ef4444; margin-top: 5px;">* জে.এল নং এবং মৌজার নাম দিয়ে সার্চ করুন</p>
     </div>
 
     <div class="search-box">
@@ -424,7 +424,7 @@
         renderResults(filteredData);
     });
 
-    // PWA Service Worker & Install Logic
+    // PWA Install Logic
     let deferredPrompt;
 
     if ('serviceWorker' in navigator) {
@@ -436,10 +436,8 @@
     }
 
     window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent default mini-infobar
         e.preventDefault();
         deferredPrompt = e;
-        // Show the install button
         installBtn.style.display = 'block';
     });
 
@@ -449,8 +447,6 @@
         deferredPrompt.userChoice.then((choiceResult) => {
             if (choiceResult.outcome === 'accepted') {
                 console.log('User accepted the install prompt');
-            } else {
-                console.log('User dismissed the install prompt');
             }
             deferredPrompt = null;
         });
