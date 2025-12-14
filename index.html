@@ -4,171 +4,241 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mouza Finder</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <link rel="apple-touch-icon" href="images/logo.png">
+    
     <style>
         :root {
-            --primary-color: #007bff;
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-color: #333;
+            --primary-color: #2563eb;
+            --text-color: #1f2937;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
         }
 
         body {
             font-family: 'SolaimanLipi', 'Kalpurush', Arial, sans-serif;
-            background-color: var(--bg-color);
+            /* সুন্দর গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             margin: 0;
             padding: 20px;
             color: var(--text-color);
+            min-height: 100vh;
+            background-attachment: fixed; /* স্ক্রল করলে ব্যাকগ্রাউন্ড নড়বে না */
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1200px; /* পিসির জন্য চওড়া */
             margin: 0 auto;
+        }
+
+        /* Glassmorphism স্টাইল */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
         }
 
         .header {
             text-align: center;
             margin-bottom: 30px;
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 30px 20px;
         }
 
         .header h1 {
             margin: 0;
-            font-size: 24px;
-            color: var(--primary-color);
+            font-size: 28px;
+            color: #1e3a8a;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
         .header p {
             margin: 10px 0 0;
-            font-size: 14px;
-            color: #666;
+            font-size: 15px;
+            color: #4b5563;
+            font-weight: 500;
         }
 
         .search-box {
-            margin-bottom: 20px;
-            position: relative;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .search-box input {
             width: 100%;
-            padding: 15px;
+            padding: 18px 25px;
             font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            box-sizing: border-box;
+            border: none;
+            border-radius: 50px;
             outline: none;
-            transition: border-color 0.3s;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
 
         .search-box input:focus {
-            border-color: var(--primary-color);
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        /* রেজাল্ট এরিয়া পিসির জন্য Grid সিস্টেম */
+        #resultsArea {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
         }
 
         .result-card {
-            background: var(--card-bg);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border-left: 5px solid var(--primary-color);
-            transition: transform 0.2s;
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
         }
 
         .result-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        /* রঙিন বর্ডার কার্ডের বাম পাশে */
+        .result-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 6px;
+            background: linear-gradient(to bottom, #2563eb, #9333ea);
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
         }
 
         .jl-badge {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
+            padding: 6px 12px;
+            border-radius: 20px;
             font-weight: bold;
             font-size: 14px;
+            box-shadow: 0 2px 5px rgba(37, 99, 235, 0.3);
         }
 
         .mouza-name {
-            font-size: 18px;
-            font-weight: bold;
-            flex-grow: 1;
-            margin-left: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+            text-align: right;
         }
 
         .price-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            grid-template-columns: 1fr;
+            gap: 12px;
             font-size: 14px;
         }
 
         .price-item {
-            background: #f9f9f9;
-            padding: 8px;
-            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(0,0,0,0.03);
         }
 
         .price-label {
             display: block;
             font-size: 12px;
-            color: #888;
-            margin-bottom: 2px;
+            color: #6b7280;
+            margin-bottom: 4px;
         }
 
         .price-value {
-            font-weight: bold;
-            color: #2c3e50;
+            font-weight: 700;
+            color: #059669; /* সবুজ রঙ টাকার জন্য */
+            font-size: 15px;
         }
 
         .no-result {
+            grid-column: 1 / -1;
             text-align: center;
-            color: #888;
-            margin-top: 20px;
+            color: white;
+            font-size: 18px;
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 10px;
         }
 
-        /* Responsive */
+        /* Install Button (Hidden by default) */
+        #installBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #111827;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            cursor: pointer;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: translate(-50%, 100px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        /* Responsive Tweaks */
         @media (max-width: 600px) {
-            .price-grid {
-                grid-template-columns: 1fr;
-            }
+            body { padding: 15px; }
+            .header h1 { font-size: 22px; }
+            /* মোবাইলে কার্ডগুলো এক কলামে থাকবে (Grid already handles auto-fill, but let's ensure) */
+            #resultsArea { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
+    <div class="header glass-panel">
         <h1>ভূমি ও মৌজা অনুসন্ধান</h1>
         <p>সাব-রেজিস্ট্রারের কার্যালয়, কলারোয়া, সাতক্ষীরা</p>
-        <p style="font-size: 12px; color: #ff5722;">* জে.এল নং এবং মৌজার নাম দিয়ে সার্চ করুন</p>
+        <p style="font-size: 12px; color: #dc2626; margin-top: 5px;">* জে.এল নং এবং মৌজার নাম দিয়ে সার্চ করুন</p>
     </div>
 
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="মৌজার নাম বা জে.এল নম্বর লিখুন... (যেমন: চান্দুড়িয়া বা 1)">
+        <input type="text" id="searchInput" placeholder="মৌজার নাম বা জে.এল নম্বর লিখুন... (যেমন: ১)">
     </div>
 
     <div id="resultsArea">
         </div>
 </div>
 
+<button id="installBtn">📲 অ্যাপটি ইনস্টল করুন</button>
+
 <script>
-    // Data from the images (1-117)
-    // Note: I have transcribed all Names and JL Numbers.
-    // Prices are filled for the first few as examples. You can edit the 'prices' fields.
+    // Data (আপনার আগের ডেটাই এখানে আছে)
     const mouzaData = [
-        // Page 1
-        { jl: "১", name: "চান্দুড়িয়া", p1: "৪৪,৭০২/-", p2: "৪১,৫৫৯/-", p3: "৬,২৫০/-", p4: "-" },
+       { jl: "১", name: "চান্দুড়িয়া", p1: "৪৪,৭০২/-", p2: "৪১,৫৫৯/-", p3: "৬,২৫০/-", p4: "-" },
         { jl: "২", name: "চন্দনপুর", p1: "৭৯,৫৭২/-", p2: "৩৩,৬২২/-", p3: "১৩,১২০/-", p4: "১,৩১,৩৫১/-" },
         { jl: "৩", name: "সুলতানপুর", p1: "৫৮,৩৩৮/-", p2: "১২,৪৯১/-", p3: "৮,২৪২/-", p4: "-" },
         { jl: "৪", name: "হিজলদী", p1: "৫৫,৮২৮/-", p2: "২৮,০৩৩/-", p3: "৮,৯৫৯/-", p4: "-" },
@@ -206,8 +276,6 @@
         { jl: "৩৬", name: "তেলকুপি", p1: "৬,০০০/-", p2: "১৪,৮০৮/-", p3: "২,৪১৩/-", p4: "-" },
         { jl: "৩৭", name: "গণপতিপুর", p1: "২৫,৪৫৭/-", p2: "৩৮,৭৯৭/-", p3: "১৪,৭৬৭/-", p4: "-" },
         { jl: "৩৮", name: "দামোদরকাটি", p1: "৮,১০৫/-", p2: "২৬,৪৩২/-", p3: "২২,১২১/-", p4: "-" },
-        
-        // Page 2
         { jl: "৩৯", name: "ব্রজবাকসা", p1: "৩৯,০৩৪/-", p2: "২৭,৬৫৬/-", p3: "১৫,২৬৩/-", p4: "১,৭০,০০০/-" },
         { jl: "৪০", name: "কাউরিয়া", p1: "৬,২৪০/-", p2: "২০,৩৩৩/-", p3: "১৩,৭৯৭/-", p4: "-" },
         { jl: "৪১", name: "বলিয়ানপুর", p1: "১১,০৩৩/-", p2: "১৫,৬৬৭/-", p3: "৮,১৪২/-", p4: "-" },
@@ -250,8 +318,6 @@
         { jl: "৭৮", name: "শিবানন্দকাটি", p1: "৯,১৪৬/-", p2: "১৬,৩০২/-", p3: "১৬,৭২৯/-", p4: "-" },
         { jl: "৭৯", name: "আটুলিয়া", p1: "৬,২১৪/-", p2: "১৩,৯০৯/-", p3: "১,৭১,৬১৪/-", p4: "-" },
         { jl: "৮০", name: "ধানঘোরা", p1: "৩০,৩৩৩/-", p2: "৫২,৮০০/-", p3: "১৬,০০১/-", p4: "-" },
-
-        // Page 3
         { jl: "৮১", name: "গোরঙ্গপুর", p1: "৩৭,৬০০/-", p2: "৪৫,৪৫৪/-", p3: "১,২০০/-", p4: "-" },
         { jl: "৮২", name: "চিচিলা", p1: "৪,৪০০/-", p2: "৩১,০৭১/-", p3: "৮,৬৭৪/-", p4: "-" },
         { jl: "৮৩", name: "পানকৌড়িয়া", p1: "৫,৫৯৪/-", p2: "২৭,৩৩৮/-", p3: "১৮,২৫১/-", p4: "-" },
@@ -293,17 +359,19 @@
 
     const searchInput = document.getElementById('searchInput');
     const resultsArea = document.getElementById('resultsArea');
+    const installBtn = document.getElementById('installBtn');
 
+    // Render Function
     function renderResults(data) {
         resultsArea.innerHTML = '';
         if (data.length === 0) {
-            resultsArea.innerHTML = '<div class="no-result">কোনো তথ্য পাওয়া যায়নি। বানান সঠিক কিনা দেখুন।</div>';
+            resultsArea.innerHTML = '<div class="no-result glass-panel">কোনো তথ্য পাওয়া যায়নি। বানান সঠিক কিনা দেখুন।</div>';
             return;
         }
 
         data.forEach(item => {
             const card = document.createElement('div');
-            card.className = 'result-card';
+            card.className = 'result-card glass-panel';
             card.innerHTML = `
                 <div class="card-header">
                     <span class="jl-badge">জে.এল নং: ${item.jl}</span>
@@ -311,19 +379,19 @@
                 </div>
                 <div class="price-grid">
                     <div class="price-item">
-                        <span class="price-label">বাস্তু/ভিটা/বাড়ী (শতক প্রতি)</span>
+                        <span class="price-label">বাস্তু/ভিটা/বাড়ী</span>
                         <span class="price-value">${item.p1}</span>
                     </div>
                     <div class="price-item">
-                        <span class="price-label">ডাঙ্গা/বাগান/পুকুর (শতক প্রতি)</span>
+                        <span class="price-label">ডাঙ্গা/বাগান/পুকুর</span>
                         <span class="price-value">${item.p2}</span>
                     </div>
                     <div class="price-item">
-                        <span class="price-label">ধানি/বিলান/পতিত (শতক প্রতি)</span>
+                        <span class="price-label">ধানি/বিলান/পতিত</span>
                         <span class="price-value">${item.p3}</span>
                     </div>
                     <div class="price-item">
-                        <span class="price-label">বাজার/দোকান (শতক প্রতি)</span>
+                        <span class="price-label">বাজার/দোকান</span>
                         <span class="price-value">${item.p4}</span>
                     </div>
                 </div>
@@ -335,7 +403,6 @@
     // Initial render
     renderResults(mouzaData);
 
-    // ১. এই ফাংশনটি ইংরেজি নম্বরকে বাংলায় কনভার্ট করবে (নতুন যোগ করা হয়েছে)
     const toBengaliNumber = (str) => {
         const engToBn = { 
             '0': '০', '1': '১', '2': '২', '3': '৩', '4': '৪', 
@@ -344,21 +411,49 @@
         return str.replace(/[0-9]/g, (match) => engToBn[match]);
     };
 
-    // ২. সার্চ ফাংশনালিটি (আপডেট করা হয়েছে)
     searchInput.addEventListener('input', (e) => {
         const searchTerm = e.target.value.trim(); 
-        
-        // তুমি যাই টাইপ করো (ইংরেজি বা বাংলা), সেটাকে আমরা বাংলায় কনভার্ট করে নিচ্ছি
         const bengaliSearchTerm = toBengaliNumber(searchTerm); 
 
         const filteredData = mouzaData.filter(item => {
-            // এখন সে নামের সাথে অথবা বাংলা নম্বরের সাথে মিলিয়ে দেখবে
             return item.name.includes(searchTerm) || 
-                   item.jl.toString().includes(searchTerm) ||      // যদি কেউ সরাসরি বাংলায় লেখে
-                   item.jl.toString().includes(bengaliSearchTerm); // যদি কেউ ইংরেজিতে লেখে
+                   item.jl.toString().includes(searchTerm) ||
+                   item.jl.toString().includes(bengaliSearchTerm);
         });
 
         renderResults(filteredData);
+    });
+
+    // PWA Service Worker & Install Logic
+    let deferredPrompt;
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then((reg) => console.log('SW Registered', reg))
+                .catch((err) => console.log('SW Failed', err));
+        });
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent default mini-infobar
+        e.preventDefault();
+        deferredPrompt = e;
+        // Show the install button
+        installBtn.style.display = 'block';
+    });
+
+    installBtn.addEventListener('click', () => {
+        installBtn.style.display = 'none';
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            } else {
+                console.log('User dismissed the install prompt');
+            }
+            deferredPrompt = null;
+        });
     });
 </script>
 
